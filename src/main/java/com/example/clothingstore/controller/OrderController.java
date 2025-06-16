@@ -1,5 +1,6 @@
 package com.example.clothingstore.controller;
 
+import com.example.clothingstore.dto.OrderResponse;
 import com.example.clothingstore.model.Order;
 import com.example.clothingstore.service.OrderService;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,11 @@ public class OrderController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest request) {
+        Order order = orderService.createFromDto(request);
+        OrderResponse response = mapper.toResponse(order); // можно временно вернуть просто order
+        return ResponseEntity.ok(response);
     }
 }
