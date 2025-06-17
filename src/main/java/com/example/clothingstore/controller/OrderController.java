@@ -1,6 +1,8 @@
 package com.example.clothingstore.controller;
 
+import com.example.clothingstore.dto.OrderRequest;
 import com.example.clothingstore.dto.OrderResponse;
+import com.example.clothingstore.mapper.OrderMapper;
 import com.example.clothingstore.model.Order;
 import com.example.clothingstore.service.OrderService;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,13 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderRequest orderRequest;
+    private final OrderMapper orderMapper;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, OrderRequest orderRequest, OrderMapper orderMapper) {
         this.orderService = orderService;
+        this.orderRequest = orderRequest;
+        this.orderMapper = orderMapper;
     }
 
     @GetMapping
@@ -48,7 +54,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest request) {
         Order order = orderService.createFromDto(request);
-        OrderResponse response = mapper.toResponse(order); // можно временно вернуть просто order
+        OrderResponse response = orderMapper.toResponse(order);
         return ResponseEntity.ok(response);
     }
 }
